@@ -25,6 +25,7 @@ class LeaderboardTableViewController: UITableViewController {
         fetchPlayers()
     }
     
+    // Update the tableview
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "LeaderboardCell", for: indexPath)
         let playerStat = players[indexPath.row]
@@ -38,7 +39,7 @@ class LeaderboardTableViewController: UITableViewController {
     }
     
     // Set number of sections
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return players.count
     }
     
@@ -47,7 +48,6 @@ class LeaderboardTableViewController: UITableViewController {
     // Function to fetch players from database
     func fetchPlayers() {
         refHandle = ref.child("Results").observe(.value, with: { (snapshot) in
-//            print(snapshot.value as Any)
             
             if (snapshot.value as? [String : AnyObject]) != nil {
                 
@@ -55,13 +55,9 @@ class LeaderboardTableViewController: UITableViewController {
                 
                 // Itereate over snapshot en save each snapshot
                 for child in snapshot.children {
-//                    print("iterate", child)
                     let player = Player(snapshot: child as! DataSnapshot)
-//                    print(player)
                     PlayerX.append(player)
                 }
-                
-                print(PlayerX)
                 
                 self.players = PlayerX
                 
